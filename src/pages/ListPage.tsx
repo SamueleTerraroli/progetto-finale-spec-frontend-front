@@ -8,20 +8,22 @@ export default function ListPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
+    const [sortOption, setSortOption] = useState("prezzo-crescente"); //prezzo crescente di default
 
-    const filteredGPUs = useMemo(() => {
-        return gpus.filter(gpu =>
-            gpu.title.toLowerCase().includes(debouncedSearch.toLowerCase()) &&
-            (!selectedCategory || gpu.category === selectedCategory)
-        );
-    }, [debouncedSearch, selectedCategory, gpus]);
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedSearch(searchTerm);
-        }, 500);
-        return () => clearTimeout(handler);
-
-    }, [searchTerm])
+    const sortedAndFilteredGPUs = useMemo(() => {
+        return [...gpus]
+            .filter(gpu =>
+                gpu.title.toLowerCase().includes(debouncedSearch.toLowerCase()) &&
+                (!selectedCategory || gpu.category === selectedCategory)
+            )
+            .sort((a, b) => {
+                if (sortOption === "price-crescente") return a.price - b.price;
+                if (sortOption === "price-decrescente") return b.price - a.price;
+                if (sortOption === "vram-crescente") return a.vram - b.vram;
+                if (sortOption === "vram-decrescente") return b.vram - a.vram;
+                return 0;
+            });
+    }, [debouncedSearch, selectedCategory, sortOption, gpus]);
 
     useEffect(() => {
         const getGPUs = async () => {
@@ -65,10 +67,26 @@ export default function ListPage() {
                     </select>
                 </div>
             </div>
+            {/* Dropdown di ordinamento */}
+            <div className="flex justify-end mb-4">
+                <label htmlFor="sortSelect" className="text-lg font-semibold mr-2">Ordina per:</label>
+                <select
+                    id="sortSelect"
+                    value={sortOption}
+                    onChange={(e) => setSortOption(e.target.value)}
+                    className="border p-2 rounded-md"
+                >
+                    <option value="price-crescente">Prezzo crescente</option>
+                    <option value="price-decrescente">Prezzo decrescente</option>
+                    <option value="vram-crescente">VRAM crescente</option>
+                    <option value="vram-decrescente">VRAM decrescente</option>
+                </select>
+            </div>
+
 
             {/* Grid per la lista delle GPU */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredGPUs.map((gpu) => (
+                {sortedAndFilteredGPUs.map((gpu) => (
                     <GPUCard key={gpu.id} gpu={gpu} />
                 ))}
             </div>
