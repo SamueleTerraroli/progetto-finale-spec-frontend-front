@@ -9,6 +9,8 @@ export default function ListPage() {
     const [debouncedSearch, setDebouncedSearch] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("");
     const [sortOption, setSortOption] = useState("prezzo-crescente"); //prezzo crescente di default
+    const [currentPage, setCurrentPage] = useState(1); //pagina iniziale
+
 
 
     const sortedAndFilteredGPUs = useMemo(() => {
@@ -25,6 +27,13 @@ export default function ListPage() {
                 return 0;
             });
     }, [debouncedSearch, selectedCategory, sortOption, gpus]);
+
+    //pagination
+    const GPUsPerPage = 12;
+    const lastGPUperPage = currentPage * GPUsPerPage;
+    const firstGPUperPage = lastGPUperPage - GPUsPerPage
+    const paginatedGPUs = sortedAndFilteredGPUs.slice(firstGPUperPage, lastGPUperPage);
+
 
     useEffect(() => {
         const getGPUs = async () => {
@@ -95,10 +104,38 @@ export default function ListPage() {
 
             {/* Grid per la lista delle GPU */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {sortedAndFilteredGPUs.map((gpu) => (
+                {paginatedGPUs.map((gpu) => (
                     <GPUCard key={gpu.id} gpu={gpu} />
                 ))}
             </div>
+
+            {/* Pagination buttons */}
+            <div className="flex justify-center items-center mt-4 gap-4">
+                <div className="w-24 flex justify-center">
+                    {currentPage > 1 && (
+                        <button
+                            onClick={() => setCurrentPage(currentPage - 1)}
+                            className="px-4 py-2 border rounded-md"
+                        >
+                            ←
+                        </button>
+                    )}
+                </div>
+
+                <span className="text-lg font-semibold"> {currentPage}</span>
+
+                <div className="w-24 flex justify-center">
+                    <button
+                        disabled={lastGPUperPage >= sortedAndFilteredGPUs.length}
+                        onClick={() => setCurrentPage(currentPage + 1)}
+                        className="px-4 py-2 border rounded-md disabled:opacity-50"
+                    >
+                        →
+                    </button>
+                </div>
+            </div>
+
+
         </div>
     );
 
