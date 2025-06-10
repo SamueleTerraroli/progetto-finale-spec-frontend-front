@@ -10,6 +10,7 @@ export default function ListPage() {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [sortOption, setSortOption] = useState("prezzo-crescente"); //prezzo crescente di default
 
+
     const sortedAndFilteredGPUs = useMemo(() => {
         return [...gpus]
             .filter(gpu =>
@@ -36,6 +37,14 @@ export default function ListPage() {
         };
         getGPUs();
     }, []);
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            setDebouncedSearch(searchTerm);
+        }, 500); // Ritardo di 500ms per evitare troppi aggiornamenti
+
+        return () => clearTimeout(handler);
+    }, [searchTerm]);
 
     return (
         <div className="container mx-auto p-4">
