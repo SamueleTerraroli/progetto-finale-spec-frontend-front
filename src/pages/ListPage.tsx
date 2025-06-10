@@ -34,6 +34,9 @@ export default function ListPage() {
     const firstGPUperPage = lastGPUperPage - GPUsPerPage
     const paginatedGPUs = sortedAndFilteredGPUs.slice(firstGPUperPage, lastGPUperPage);
 
+    const totalPages = Math.ceil(sortedAndFilteredGPUs.length / GPUsPerPage);
+    const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+
 
     useEffect(() => {
         const getGPUs = async () => {
@@ -110,30 +113,18 @@ export default function ListPage() {
             </div>
 
             {/* Pagination buttons */}
-            <div className="flex justify-center items-center mt-4 gap-4">
-                <div className="w-24 flex justify-center">
-                    {currentPage > 1 && (
-                        <button
-                            onClick={() => setCurrentPage(currentPage - 1)}
-                            className="px-4 py-2 border rounded-md"
-                        >
-                            ←
-                        </button>
-                    )}
-                </div>
-
-                <span className="text-lg font-semibold"> {currentPage}</span>
-
-                <div className="w-24 flex justify-center">
+            <div className="flex justify-center items-center mt-4 gap-2">
+                {pageNumbers.map((page) => (
                     <button
-                        disabled={lastGPUperPage >= sortedAndFilteredGPUs.length}
-                        onClick={() => setCurrentPage(currentPage + 1)}
-                        className="px-4 py-2 border rounded-md disabled:opacity-50"
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-2 border rounded-md ${currentPage === page ? "bg-blue-500 text-white" : ""}`}
                     >
-                        →
+                        {page}
                     </button>
-                </div>
+                ))}
             </div>
+
 
 
         </div>
