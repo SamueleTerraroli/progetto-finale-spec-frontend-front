@@ -11,3 +11,13 @@ export const fetchGPUs = async () => {
         return [];
     }
 }
+
+export const fetchGPUByID = async (id: string) => {
+    try {
+        const response = await axios.get(`${API_URL}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Errore nel recupero della GPU', error);
+        return null;
+    }
+}

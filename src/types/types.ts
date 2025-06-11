@@ -9,4 +9,7 @@ export type GPU = {
     cudaCores?: number;
     tdp: number;
     price: number;
+    image: string;
+    description: string;
+
 };

@@ -17,7 +17,7 @@ function App() {
         <Route path='/' element={<Home />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/list' element={<ListPage />} />
-        <Route path='/detail/:id' element={<DetailRecord />} />
+        <Route path='/gpu/:id' element={<DetailRecord />} />
         <Route path='/compare' element={<Comparator />} />
         <Route path='/favourites' element={<FavouriteProducts />} />
         <Route path='*' element={<NotFound />} /> //gestione errori

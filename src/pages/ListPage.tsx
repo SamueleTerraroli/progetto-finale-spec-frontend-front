@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { fetchGPUs } from "../services/api";
 import type { GPU } from "../types/types";
 import GPUCard from "../components/GPUCard";
+import { Link } from "react-router-dom";
 
 export default function ListPage() {
     const [gpus, setGpus] = useState<GPU[]>([]);
@@ -108,7 +109,9 @@ export default function ListPage() {
             {/* Grid per la lista delle GPU */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {paginatedGPUs.map((gpu) => (
-                    <GPUCard key={gpu.id} gpu={gpu} />
+                    <Link key={gpu.id} to={`/gpu/${gpu.id}`}>
+                        <GPUCard gpu={gpu} />
+                    </Link>
                 ))}
             </div>
 
