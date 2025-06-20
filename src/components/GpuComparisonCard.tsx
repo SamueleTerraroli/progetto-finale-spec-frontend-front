@@ -1,4 +1,6 @@
 import type { GPU } from "../types/types";
+import { useFavorites } from "../context/FavoriteContext";
+
 
 interface Props {
     gpu: GPU;
@@ -20,6 +22,8 @@ export default function GpuComparisonCard({ gpu, otherGpu }: Props) {
     const isBestBudgetChoice = isBetterPrice && (performanceScore <= otherPerformanceScore);
     // "Best Performance": se non è più economica ma ha un punteggio prestazionale superiore.
     const isBestPerformanceChoice = (!isBetterPrice) && (performanceScore > otherPerformanceScore);
+
+    const { toggleFavorite, isFavorite } = useFavorites();
 
     return (
         <div className={`container mx-auto p-6 relative ${isBestOverallChoice || isBestPerformanceChoice || isBestBudgetChoice ? "bg-blue-50" : "bg-white"} rounded-lg shadow-md`}>
@@ -88,6 +92,14 @@ export default function GpuComparisonCard({ gpu, otherGpu }: Props) {
                 <p className={`text-md ${gpu.description ? "" : "text-gray-500 italic"}`}>
                     {gpu.description ?? "Nessuna descrizione disponibile."}
                 </p>
+                <button
+                    className="absolute top-2 left-2 text-xl"
+                    onClick={() => toggleFavorite(gpu)}
+                    aria-label="Aggiungi ai preferiti"
+                >
+                    {isFavorite(gpu.id) ? "❤️" : "🤍"}
+                </button>
+
             </div>
         </div>
     );
