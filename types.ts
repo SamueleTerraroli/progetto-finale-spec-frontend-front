@@ -1,0 +1,13 @@
+export type GPU = {
+    title: string,
+    category: string,
+    brand: string,
+    vram: number,
+    clockSpeed: number,
+    boostClock: number,
+    cudaCores?: number,
+    tdp: number,
+    price: number,
+    image?: string,
+    description?: string,
+};
