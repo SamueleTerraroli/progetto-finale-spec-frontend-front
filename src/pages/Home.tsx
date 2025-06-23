@@ -10,6 +10,7 @@ export default function Home() {
     const [allGpus, setAllGpus] = useState<GPU[]>([]);
     const [recommended, setRecommended] = useState<GPU[]>([]);
 
+
     useEffect(() => {
         const loadGpus = async () => {
             try {
@@ -26,6 +27,9 @@ export default function Home() {
 
         loadGpus();
     }, []);
+    if (!isReady) {
+        return <p className="text-center text-gray-500">Caricamento preferiti...</p>;
+    }
 
     return (
         <div className="container mx-auto px-4 py-8">
